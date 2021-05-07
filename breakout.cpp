@@ -990,30 +990,29 @@ int main() {
                         score = score + 1;
                         updateBlocks(score);
                     }
+                } else if (ballVelocity[0] < 0) {
+                    if (distanceFromPaddle > 0) {
+                        // std::cout << "Hit type 3" << std::endl;
+                        float returnAngle = - 2*acos(distanceFromPaddle/1.01770573) + atan(-ballVelocity[1]/ballVelocity[0]);
+                        ballVelocity = glm::vec2(0.008602325*cos(returnAngle), 0.008602325*sin(returnAngle));
+                        timeOfLastHit = (float)glfwGetTime();
+                        score = score + 1;
+                        updateBlocks(score);
+                    } else if (distanceFromPaddle < 0) {
+                        // std::cout << "Hit type 4" << std::endl;
+                        float returnAngle = - 2*acos(distanceFromPaddle/1.01770573) + atan(-ballVelocity[1]/ballVelocity[0]);
+                        ballVelocity = glm::vec2(0.008602325*cos(returnAngle), 0.008602325*sin(returnAngle));
+                        timeOfLastHit = (float)glfwGetTime();
+                        score = score + 1;
+                        updateBlocks(score);
+                    } else {
+                        // std::cout << "Hit type 5" << std::endl;
+                        ballVelocity = glm::vec2(ballVelocity[0], -ballVelocity[1]);   
+                        timeOfLastHit = (float)glfwGetTime();
+                        score = score + 1;
+                        updateBlocks(score);
+                    }
                 }
-                // } else if (ballVelocity[0] < 0) {
-                //     if (distanceFromPaddle > 0) {
-                //         // std::cout << "Hit type 3" << std::endl;
-                //         float returnAngle = - 2*acos(distanceFromPaddle/1.01770573) + atan(-ballVelocity[1]/ballVelocity[0]);
-                //         ballVelocity = glm::vec2(0.008602325*cos(returnAngle), 0.008602325*sin(returnAngle));
-                //         timeOfLastHit = (float)glfwGetTime();
-                //         score = score + 1;
-                //         updateBlocks(score);
-                //     } else if (distanceFromPaddle < 0) {
-                //         // std::cout << "Hit type 4" << std::endl;
-                //         float returnAngle = - 2*acos(distanceFromPaddle/1.01770573) + atan(-ballVelocity[1]/ballVelocity[0]);
-                //         ballVelocity = glm::vec2(0.008602325*cos(returnAngle), 0.008602325*sin(returnAngle));
-                //         timeOfLastHit = (float)glfwGetTime();
-                //         score = score + 1;
-                //         updateBlocks(score);
-                //     } else {
-                //         // std::cout << "Hit type 5" << std::endl;
-                //         ballVelocity = glm::vec2(ballVelocity[0], -ballVelocity[1]);   
-                //         timeOfLastHit = (float)glfwGetTime();
-                //         score = score + 1;
-                //         updateBlocks(score);
-                //     }
-                // }
             }
         }
 
@@ -1032,15 +1031,16 @@ int main() {
                                 ballVelocity = glm::vec2(ballVelocity[0], -ballVelocity[1]);
                                 blockData[i][j] = blockData[i][j] - 1;
                             }
-                        } else if ((ballPos[1] < 0.9875-0.025*i + 0.0125) && (ballPos[1] > 0.9875-0.025*i - 0.0125)) {
-                            if ((ballPos[0] < -1.0+0.2*j) && (ballPos[1] > -1.01+0.2*j)) {
-                                ballVelocity = glm::vec2(-ballVelocity[0], ballVelocity[1]);
-                                blockData[i][j] = blockData[i][j] - 1;
-                            } else if ((ballPos[0] > -0.8+0.2*j) && (ballPos[0] < -0.79+0.2*j)) {
-                                ballVelocity = glm::vec2(-ballVelocity[0], ballVelocity[1]);
-                                blockData[i][j] = blockData[i][j] - 1;
-                            }
                         }
+                        // } else if ((ballPos[1] < 0.9875-0.025*i + 0.0125) && (ballPos[1] > 0.9875-0.025*i - 0.0125)) {
+                        //     if ((ballPos[0] < -1.0+0.2*j) && (ballPos[1] > -1.01+0.2*j)) {
+                        //         ballVelocity = glm::vec2(-ballVelocity[0], ballVelocity[1]);
+                        //         blockData[i][j] = blockData[i][j] - 1;
+                        //     } else if ((ballPos[0] > -0.8+0.2*j) && (ballPos[0] < -0.79+0.2*j)) {
+                        //         ballVelocity = glm::vec2(-ballVelocity[0], ballVelocity[1]);
+                        //         blockData[i][j] = blockData[i][j] - 1;
+                        //     }
+                        // }
                     }
                 }                
             }
