@@ -938,8 +938,13 @@ int main() {
                         glm::mat4 blockTransform = glm::mat4(1.0f);
                         blockTransform = glm::translate(blockTransform, glm::vec3(-0.9+0.2*j, 0.9875-0.025*i, 0.0f));
 
+                        glm::vec3 blockColor = glm::vec3(0.0f, 0.1f*blockData[i][j], 0.0f);
+
                         unsigned int blockTransformLoc = glGetUniformLocation(blockShader.ID, "transform");
                         glUniformMatrix4fv(blockTransformLoc, 1, GL_FALSE, glm::value_ptr(blockTransform));
+
+                        unsigned int blockColorLoc = glGetUniformLocation(blockShader.ID, "blockColor");
+                        glUniform3fv(blockColorLoc, 1, glm::value_ptr(blockColor));
 
                         glBindVertexArray(blockVAO);
                         glDrawArrays(GL_TRIANGLES, 0, 6*3);    
@@ -985,29 +990,30 @@ int main() {
                         score = score + 1;
                         updateBlocks(score);
                     }
-                } else if (ballVelocity[0] < 0) {
-                    if (distanceFromPaddle > 0) {
-                        // std::cout << "Hit type 3" << std::endl;
-                        float returnAngle = - 2*acos(distanceFromPaddle/1.01770573) + atan(-ballVelocity[1]/ballVelocity[0]);
-                        ballVelocity = glm::vec2(0.008602325*cos(returnAngle), 0.008602325*sin(returnAngle));
-                        timeOfLastHit = (float)glfwGetTime();
-                        score = score + 1;
-                        updateBlocks(score);
-                    } else if (distanceFromPaddle < 0) {
-                        // std::cout << "Hit type 4" << std::endl;
-                        float returnAngle = - 2*acos(distanceFromPaddle/1.01770573) + atan(-ballVelocity[1]/ballVelocity[0]);
-                        ballVelocity = glm::vec2(0.008602325*cos(returnAngle), 0.008602325*sin(returnAngle));
-                        timeOfLastHit = (float)glfwGetTime();
-                        score = score + 1;
-                        updateBlocks(score);
-                    } else {
-                        // std::cout << "Hit type 5" << std::endl;
-                        ballVelocity = glm::vec2(ballVelocity[0], -ballVelocity[1]);   
-                        timeOfLastHit = (float)glfwGetTime();
-                        score = score + 1;
-                        updateBlocks(score);
-                    }
                 }
+                // } else if (ballVelocity[0] < 0) {
+                //     if (distanceFromPaddle > 0) {
+                //         // std::cout << "Hit type 3" << std::endl;
+                //         float returnAngle = - 2*acos(distanceFromPaddle/1.01770573) + atan(-ballVelocity[1]/ballVelocity[0]);
+                //         ballVelocity = glm::vec2(0.008602325*cos(returnAngle), 0.008602325*sin(returnAngle));
+                //         timeOfLastHit = (float)glfwGetTime();
+                //         score = score + 1;
+                //         updateBlocks(score);
+                //     } else if (distanceFromPaddle < 0) {
+                //         // std::cout << "Hit type 4" << std::endl;
+                //         float returnAngle = - 2*acos(distanceFromPaddle/1.01770573) + atan(-ballVelocity[1]/ballVelocity[0]);
+                //         ballVelocity = glm::vec2(0.008602325*cos(returnAngle), 0.008602325*sin(returnAngle));
+                //         timeOfLastHit = (float)glfwGetTime();
+                //         score = score + 1;
+                //         updateBlocks(score);
+                //     } else {
+                //         // std::cout << "Hit type 5" << std::endl;
+                //         ballVelocity = glm::vec2(ballVelocity[0], -ballVelocity[1]);   
+                //         timeOfLastHit = (float)glfwGetTime();
+                //         score = score + 1;
+                //         updateBlocks(score);
+                //     }
+                // }
             }
         }
 
