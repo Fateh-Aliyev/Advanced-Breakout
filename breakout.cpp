@@ -973,6 +973,11 @@ int main() {
             ballVelocity = glm::vec2(0.0f, 0.0f);
             gameOver = 1;
             score = 0;
+            for (int i = 0; i < 70; i++) {
+                for (int j = 0; j < 10; j++) {
+                    blockData[i][j] = 0;
+                }
+            }
         } else if (ballPos[0] <= -0.99) {
             ballVelocity = glm::vec2(-ballVelocity[0], ballVelocity[1]);
         } else if (ballPos[1] >= 0.99) {
