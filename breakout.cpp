@@ -52,13 +52,19 @@ float distance(glm::vec2 a, glm::vec2 b) {
     return sqrt(pow(a[0]-b[0], 2) + pow(a[1]-b[1], 2));
 }
 
+int gameOver = 0;
+int newGame = 1;
+
+std::string newGameLine = "Press Space to Start";
+std::string GameOverLine = "Game Over";
+
 int main() {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Single-Player Pong", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Advanced Breakout", NULL, NULL);
     if (window == NULL) {
         std::cout << "Failed to create GLFW window." << std::endl;
         glfwTerminate();
@@ -953,12 +959,20 @@ int main() {
             }
         }
 
-        RenderText(textShader, std::to_string(score), 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+        RenderText(textShader, std::to_string(score), 25.0f, 25.0f, 1.0f, glm::vec3(0.5f, 0.8f, 0.2f));
+        if ((newGame == 1) && (ballVelocity == glm::vec2(0.0f, 0.0f))) {
+            RenderText(textShader, newGameLine, 250.0f, 450.0f, 2.0f, glm::vec3(0.5f, 0.8f, 0.2f));
+        } else if ((gameOver == 1) && (ballVelocity == glm::vec2(0.0f, 0.0f))) {
+            RenderText(textShader, newGameLine, 250.0f, 450.0f, 2.0f, glm::vec3(0.5f, 0.8f, 0.2f));
+            RenderText(textShader, GameOverLine, 310.0f, 500.0f, 2.0f, glm::vec3(0.5f, 0.8f, 0.2f));
+        }
 
         // set new ballPos
         ballPos = ballPos + ballVelocity;
         if (ballPos[1] <= -0.99) {
-            ballVelocity = glm::vec2(0.0f, 0.0f); 
+            ballVelocity = glm::vec2(0.0f, 0.0f);
+            gameOver = 1;
+            score = 0;
         } else if (ballPos[0] <= -0.99) {
             ballVelocity = glm::vec2(-ballVelocity[0], ballVelocity[1]);
         } else if (ballPos[1] >= 0.99) {
@@ -1075,8 +1089,10 @@ void processInput(GLFWwindow* window) {
         if (ballVelocity == glm::vec2(0, 0)) {
             if (ballPos[1] <= -0.99) {
                 ballPos = glm::vec2(0, 0);
+                gameOver = 0;
             }
             ballVelocity = glm::vec2(0.005, -0.007);
+            newGame = 0;
         }
     }
 }
