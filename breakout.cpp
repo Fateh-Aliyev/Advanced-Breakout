@@ -54,6 +54,9 @@ float distance(glm::vec2 a, glm::vec2 b) {
 
 int gameOver = 0;
 int newGame = 1;
+int paused = 0;
+glm::vec2 pausedVelocity = glm::vec2(0.005, -0.007);
+float timeOfLastPause = 0;
 
 std::string newGameLine = "Press Space to Start";
 std::string GameOverLine = "Game Over";
@@ -965,6 +968,8 @@ int main() {
         } else if ((gameOver == 1) && (ballVelocity == glm::vec2(0.0f, 0.0f))) {
             RenderText(textShader, newGameLine, 250.0f, 450.0f, 2.0f, glm::vec3(0.5f, 0.8f, 0.2f));
             RenderText(textShader, GameOverLine, 310.0f, 500.0f, 2.0f, glm::vec3(0.5f, 0.8f, 0.2f));
+        } else if (paused == 1) {
+            RenderText(textShader, "Paused, press Space", 250.0f, 450.0f, 2.0f, glm::vec3(0.5f, 0.8f, 0.2f));
         }
 
         // set new ballPos
@@ -1091,13 +1096,21 @@ void processInput(GLFWwindow* window) {
             paddlePos = glm::vec2(paddlePos[0] - 0.01, paddlePos[1]);
         }
     } else if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
-        if (ballVelocity == glm::vec2(0, 0)) {
-            if (ballPos[1] <= -0.99) {
-                ballPos = glm::vec2(0, 0);
-                gameOver = 0;
+        if ((float)glfwGetTime() - timeOfLastPause >= 1) {
+            if (ballVelocity == glm::vec2(0, 0)) {
+                if (ballPos[1] <= -0.99) {
+                    ballPos = glm::vec2(0, 0);
+                    gameOver = 0;
+                    pausedVelocity = glm::vec2(0.005, -0.007);
+                }
+                ballVelocity = pausedVelocity;
+                newGame = 0;
+                paused = 0;
+            } else if (ballVelocity != glm::vec2(0, 0)) {
+                pausedVelocity = ballVelocity;
+                ballVelocity = glm::vec2(0, 0);
+                paused = 1;
             }
-            ballVelocity = glm::vec2(0.005, -0.007);
-            newGame = 0;
         }
     }
 }
