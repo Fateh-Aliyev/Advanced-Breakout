@@ -983,6 +983,7 @@ int main() {
                     blockData[i][j] = 0;
                 }
             }
+            paddlePos = glm::vec2(0.0f, -0.9f);
         } else if (ballPos[0] <= -0.99) {
             ballVelocity = glm::vec2(-ballVelocity[0], ballVelocity[1]);
         } else if (ballPos[1] >= 0.99) {
@@ -1088,12 +1089,16 @@ void processInput(GLFWwindow* window) {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
     } else if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
-        if (paddlePos[0] <= 0.9) {
-            paddlePos = glm::vec2(paddlePos[0] + 0.01, paddlePos[1]);
+        if ((paused == 0) && (newGame == 0) && (gameOver == 0)) {
+            if (paddlePos[0] <= 0.9) {
+                paddlePos = glm::vec2(paddlePos[0] + 0.01, paddlePos[1]);
+            }
         }
     } else if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
-        if (paddlePos[0] >= -0.9) {
-            paddlePos = glm::vec2(paddlePos[0] - 0.01, paddlePos[1]);
+        if ((paused == 0) && (newGame == 0) && (gameOver == 0)) {
+            if (paddlePos[0] >= -0.9) {
+                paddlePos = glm::vec2(paddlePos[0] - 0.01, paddlePos[1]);
+            }
         }
     } else if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
         if ((float)glfwGetTime() - timeOfLastPause >= 1) {
